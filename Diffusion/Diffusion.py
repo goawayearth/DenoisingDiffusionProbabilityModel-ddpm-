@@ -39,7 +39,11 @@ class GaussianDiffusionTrainer(nn.Module):
         Algorithm 1.
         """
         t = torch.randint(self.T, size=(x_0.shape[0], ), device=x_0.device)
+        
+        # !这里改成原始图像
         noise = torch.randn_like(x_0)
+        # !这里改成原始图像
+        
         x_t = (
             extract(self.sqrt_alphas_bar, t, x_0.shape) * x_0 +
             extract(self.sqrt_one_minus_alphas_bar, t, x_0.shape) * noise)
@@ -92,7 +96,10 @@ class GaussianDiffusionSampler(nn.Module):
             mean, var= self.p_mean_variance(x_t=x_t, t=t)
             # no noise when t == 0
             if time_step > 0:
+                
+                #! node = x_T
                 noise = torch.randn_like(x_t)
+                #! node = x_T
             else:
                 noise = 0
             x_t = mean + torch.sqrt(var) * noise

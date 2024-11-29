@@ -80,9 +80,13 @@ def eval(modelConfig: Dict):
         sampler = GaussianDiffusionSampler(
             model, modelConfig["beta_1"], modelConfig["beta_T"], modelConfig["T"]).to(device)
         # Sampled from standard normal distribution
+        
+        #! noisyImage应该是输入的眼底图像，这得改改
         noisyImage = torch.randn(
             size=[modelConfig["batch_size"], 3, 32, 32], device=device)
+        
         saveNoisy = torch.clamp(noisyImage * 0.5 + 0.5, 0, 1)
+        #! noisyImage应该是输入的眼底图像
         save_image(saveNoisy, os.path.join(
             modelConfig["sampled_dir"], modelConfig["sampledNoisyImgName"]), nrow=modelConfig["nrow"])
         sampledImgs = sampler(noisyImage)

@@ -7,11 +7,13 @@ from torch.nn import init
 from torch.nn import functional as F
 
 
+
 class Swish(nn.Module):
     def forward(self, x):
         return x * torch.sigmoid(x)
 
 
+# 时间位置嵌入
 class TimeEmbedding(nn.Module):
     def __init__(self, T, d_model, dim):
         assert d_model % 2 == 0
@@ -42,6 +44,7 @@ class TimeEmbedding(nn.Module):
     def forward(self, t):
         emb = self.timembedding(t)
         return emb
+
 
 
 class DownSample(nn.Module):
@@ -241,7 +244,11 @@ if __name__ == '__main__':
     model = UNet(
         T=1000, ch=128, ch_mult=[1, 2, 2, 2], attn=[1],
         num_res_blocks=2, dropout=0.1)
-    x = torch.randn(batch_size, 3, 32, 32)
+    
+    #!-----------------------------------------------
+    #!x = torch.randn(batch_size, 3, 32, 32)
+    x = '某个image'
+    #!-----------------------------------------------
     t = torch.randint(1000, (batch_size, ))
     y = model(x, t)
     print(y.shape)
